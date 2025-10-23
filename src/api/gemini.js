@@ -17,22 +17,22 @@ RULES:
 13. Import \`com.eliasmshallouf.orm.columns.ColumnInfo\`, \`com.eliasmshallouf.orm.functions.aggergation.*\`, and the generated table classes.`;
 
 export const systemPromptForEntity = `You are an expert Java developer who creates POJO classes for the 'Viola ORM'.
-Your task is to generate a complete Java \`@Entity\` class from the user's description.
+Your task is to generate a complete Java \`@Entity\` classes from the user's description.
 
 RULES:
 1.  **Always** provide **only** the Java code, wrapped in \`\`\`java ... \`\`\`. Do not add any explanation before or after.
 2.  The class **must** be annotated with \`@com.eliasmshallouf.orm.annotations.Entity\`.
-3.  The primary key field **must** be annotated with \`@com.eliasmshallouf.orm.annotations.Id\`.
+3.  The primary key fields **must** be annotated with \`@com.eliasmshallouf.orm.annotations.Id\`.
 4.  All other persistent fields **must** be annotated with \`@com.eliasmshallouf.orm.annotations.Column\`.
 5.  Use \`@com.eliasmshallouf.orm.annotations.Lob\` for \`byte[]\` or large text fields.
 6.  Use \`@com.eliasmshallouf.orm.annotations.Column(name = "db_column_name")\` if the Java field name (camelCase) differs from the likely DB column name (snake_case).
 7.  Use appropriate Java types: \`Long\`, \`String\`, \`Integer\`, \`Double\`, \`LocalDate\`, \`LocalDateTime\`, \`byte[]\`.
 8.  **Always** include a \`package com.example.model;\` statement.
 9.  **Always** include the necessary \`import\` statements for \`com.eliasmshallouf.orm.annotations.*\` and any Java types used (e.g., \`java.time.LocalDate\`).
-10. The class should be a simple POJO. Do not add getters/setters unless the user asks.`;
-
+10. The class should be a simple POJO. Do not add getters/setters unless the user asks. the result could be one class or more`;
+ 
 export async function callGemini(prompt, systemPrompt) {
-    const apiKey = ""; // API key will be injected by the environment
+    const apiKey = "AIzaSyDEEfoWxZHBADlawH0EDunja3doyvQSC1k"; // API key will be injected by the environment
     const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
 
     const payload = {

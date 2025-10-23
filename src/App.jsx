@@ -4,17 +4,21 @@ import Header from './components/Header';
 import TableOfContents from './components/TableOfContents';
 import Footer from './components/Footer';
 import CodeBlock from './components/CodeBlock';
+import ScrollToTopButton from './components/ScrollToTopButton';
+import { useInView } from 'react-intersection-observer';
 import GeminiAssistant from './components/GeminiAssistant';
 import { codeContent } from './utils/codeContent';
 
 // --- Main App Component ---
 export default function App() {
+    const { ref: heroRef, inView: isHeroVisible } = useInView({ threshold: 0.1 });
+    const { ref: footerRef, inView: isFooterVisible } = useInView({ threshold: 0.2 });
     const [activeSection, setActiveSection] = useState('#interoduction');
 
     // Re-usable smooth scroll logic
     const handleSmoothScroll = useCallback((e, href) => {
         e.preventDefault();
-        const targetElement = document.querySelector(href);
+        const targetElement = href === '#' ? document.body : document.querySelector(href);
         if(targetElement) {
             const headerOffset = 80;
             const elementPosition = targetElement.getBoundingClientRect().top;
@@ -25,7 +29,7 @@ export default function App() {
                 behavior: "smooth"
             });
             
-            if (history.pushState) {
+            if (href !== '#' && history.pushState) {
                 history.pushState(null, null, href);
             } else {
                 location.hash = href;
@@ -89,38 +93,51 @@ export default function App() {
 
     return (
         <>
-            <Header onNavLinkClick={handleSmoothScroll} activeSection={activeSection} />
+            <ScrollToTopButton 
+                isVisible={!isHeroVisible && !isFooterVisible} 
+                onClick={(e) => handleSmoothScroll(e, '#')}
+            />
+
+            <Header onNavLinkClick={handleSmoothScroll} activeSection={activeSection} isHeroVisible={isHeroVisible} />
+
+            {/* --- Full Page Hero Section --- */}
+            <section id="home" ref={heroRef} className="hero-container h-screen min-h-screen flex flex-col justify-center items-center text-center overflow-hidden">
+                {/* Blobs for mesh gradient */}
+                <div className="hero-blob one"></div>
+                <div className="hero-blob two"></div>
+                <div className="hero-blob three"></div>
+            
+                <div className="relative z-10 animate-fade-in-up">
+                    <h1 className="hero-text text-5xl md:text-7xl font-extrabold tracking-tighter mb-6">
+                        Viola ORM
+                    </h1>
+                    <p className="text-2xl text-slate-300 mb-8">
+                        The Modern, Type-Safe Java ORM.
+                    </p>
+                    <p className="text-lg text-slate-400 mb-10 max-w-3xl mx-auto">
+                        Leverage powerful compile-time code generation to build robust, maintainable, and fluent
+                        Object-Oriented database queries in Java. Stop writing fragile SQL strings and start building.
+                    </p>
+                    <div className="flex flex-wrap justify-center items-center gap-4">
+                        <a href="#getting-started" onClick={(e) => handleSmoothScroll(e, '#getting-started')} className="inline-block bg-violet-600 hover:bg-violet-700 text-white font-semibold text-base px-6 py-2.5 rounded-lg shadow-lg transition-all duration-200">
+                            Get Started
+                        </a>
+                        <a href="https://github.com/Elias-Shallouf/viola/releases" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 border border-slate-600 hover:bg-slate-800 text-slate-300 font-medium text-base px-6 py-2.5 rounded-lg shadow-lg transition-all duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            Download
+                        </a>
+                        <a href="https://github.com/Elias-Shallouf/viola" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-slate-400 hover:text-violet-400 font-medium text-base px-6 py-2.5 rounded-lg transition-all duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                            GitHub
+                        </a>
+                    </div>
+                </div>
+            </section>
 
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col-reverse lg:flex-row">
-                    
                     {/* Main documentation content */}
                     <main className="lg:w-3/4 lg:pr-12 xl:pr-24 py-12 lg:py-16">
-                        
-                        <section id="home" className="mb-16 scroll-mt-20">
-                            <h1 className="hero-text text-5xl md:text-6xl font-extrabold tracking-tighter mb-6">
-                                Viola ORM
-                            </h1>
-                            <p className="text-2xl text-slate-300 mb-8">
-                                The Modern, Type-Safe Java ORM.
-                            </p>
-                            <p className="text-lg text-slate-400 mb-10 max-w-3xl">
-                                Leverage powerful compile-time code generation to build robust, maintainable, and fluent
-                                Object-Oriented database queries in Java. Stop writing fragile SQL strings and start building.
-                            </p>
-                            <div className="flex flex-wrap gap-4">
-                                <a href="#getting-started" onClick={(e) => handleSmoothScroll(e, '#getting-started')} className="inline-block bg-violet-600 hover:bg-violet-700 text-white font-semibold text-lg px-8 py-3 rounded-lg shadow-lg transition-all duration-200">
-                                    Get Started
-                                </a>
-                                <a href="https://github.com/Elias-Shallouf/viola/releases" target="_blank" rel="noopener noreferrer" className="inline-block bg-slate-700 hover:bg-slate-600 text-white font-semibold text-lg px-8 py-3 rounded-lg shadow-lg transition-all duration-200">
-                                    Download JARs
-                                </a>
-                                <a href="https://github.com/Elias-Shallouf/viola" target="_blank" rel="noopener noreferrer" className="inline-block border border-slate-600 hover:bg-slate-800 text-slate-300 font-semibold text-lg px-8 py-3 rounded-lg shadow-lg transition-all duration-200">
-                                    GitHub Repo
-                                </a>
-                            </div>
-                        </section>
-
                         <section id="introduction" className="mb-16 scroll-mt-20">
                             <h2>What is Viola ORM?</h2>
                             <p className="mb-4">
@@ -205,7 +222,6 @@ export default function App() {
                                        type and handle it as a byte array or stream.</p>
                                 </li>
                             </ul>
-
                             <h3>Generated Code Explained</h3>
                             <p className="mb-4">Let's look at a "before and after" based on your <code>Employee</code> entity.</p>
                             
@@ -342,7 +358,7 @@ export default function App() {
                 </div>
             </div>
 
-            <Footer />
+            <Footer ref={footerRef}/>
         </>
     );
 }

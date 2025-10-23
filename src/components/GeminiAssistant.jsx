@@ -5,33 +5,60 @@ import { highlightBlock } from '../utils/highlighter';
 const GeminiAssistant = () => {
     const [mode, setMode] = useState('query'); // 'query' or 'entity'
     const [prompt, setPrompt] = useState('');
-    const [output, setOutput] = useState('');
+    const [generatedClasses, setGeneratedClasses] = useState([]);
+    const [activeTab, setActiveTab] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const outputRef = useRef(null);
+
+    const parseJavaClasses = (rawCode) => {
+        // Split the raw code by the 'package' keyword, keeping the delimiter
+        const codeBlocks = rawCode.split(/(?=package\s)/).filter(block => block.trim() !== '');
+        
+        if (codeBlocks.length === 0 && rawCode.trim()) {
+            // Fallback for single, non-standard class definitions without a package
+            return [{ name: 'Class.java', code: rawCode.trim() }];
+        }
+
+        return codeBlocks.map(block => {
+            const trimmedBlock = block.trim();
+            // Regex to find the class name
+            const classNameMatch = trimmedBlock.match(/(?:public\s+)?class\s+([A-Z][\w]*)/);
+            
+            if (classNameMatch && classNameMatch[1]) {
+                return {
+                    name: `${classNameMatch[1]}.java`,
+                    code: trimmedBlock
+                };
+            }
+
+            // Fallback if no class name is found in the block
+            return { name: 'Untitled.java', code: trimmedBlock };
+        });
+    };
 
     const handleGenerate = async () => {
         if (!prompt) return;
 
         setIsLoading(true);
-        setOutput(''); // Clear previous output
+        setGeneratedClasses([]); // Clear previous output
         
         const systemPrompt = (mode === 'query') ? systemPromptForQuery : systemPromptForEntity;
         let resultText = await callGemini(prompt, systemPrompt);
 
         // Clean up the response (remove markdown backticks)
-        resultText = resultText.replace(/^```java\n?/, '');
-        resultText = resultText.replace(/\n?```$/, '');
+        resultText = resultText.replace(/```java\n?|```/g, '').trim();
         
-        setOutput(resultText.trim());
+        setGeneratedClasses(parseJavaClasses(resultText));
+        setActiveTab(0);
         setIsLoading(false);
     };
 
     // Highlight the output when it changes
     useEffect(() => {
-        if (outputRef.current) {
+        if (outputRef.current && generatedClasses.length > 0) {
             highlightBlock(outputRef.current, 'java');
         }
-    }, [output]);
+    }, [generatedClasses, activeTab]);
 
     return (
         <section id="gemini-playground" className="mb-16 scroll-mt-20">
@@ -73,11 +100,31 @@ const GeminiAssistant = () => {
                 {/* Output */}
                 <div>
                     <label className="block text-sm font-medium text-slate-300 mb-2">Generated Code</label>
-                    <div id="gemini-output-wrapper" className="gemini-output">
+                    <div id="gemini-output-wrapper" className="gemini-output relative">
                         {isLoading && <div id="gemini-loader" className="loader"></div>}
-                        <pre id="gemini-output-pre" className={`!m-0 !p-0 ${isLoading ? 'hidden' : ''}`}>
-                            <code id="gemini-output-code" ref={outputRef} className="language-java block !p-5 !bg-transparent">{output}</code>
-                        </pre>
+                        <div className={`${isLoading || generatedClasses.length === 0 ? 'hidden' : ''}`}>
+                            {/* Tabs for multiple classes */}
+                            {mode === 'entity' && generatedClasses.length > 1 && (
+                                <div className="flex space-x-1 bg-slate-800/50 border-b border-slate-700 px-5 py-3 gap-3">
+                                    {generatedClasses.map((cls, index) => (
+                                        <button
+                                            key={index}
+                                            className={`px-4 py-2 text-sm font-medium rounded-t-md transition-colors ${
+                                                activeTab === index
+                                                    ? 'bg-slate-900 text-violet-300'
+                                                    : 'text-slate-400 hover:bg-slate-700/50 bg-slate-800/50'
+                                            }`}
+                                            onClick={() => setActiveTab(index)}
+                                        >
+                                            {cls.name}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                            <pre id="gemini-output-pre" className="!m-0 !p-0 !bg-transparent !border-0">
+                                <code id="gemini-output-code" ref={outputRef} className="language-java block !p-5 !bg-transparent">{generatedClasses[activeTab]?.code || ''}</code>
+                            </pre>
+                        </div>
                     </div>
                 </div>
             </div>

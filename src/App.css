@@ -1,6 +1,6 @@
 /* Custom styles */
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Poppins', sans-serif;
     background-color: #0B1120; /* A very dark blue */
     color: #CBD5E1; /* slate-300 */
 }
@@ -252,4 +252,90 @@ pre:hover .copy-btn {
 }
 @keyframes spin {
     to { transform: rotate(360deg); }
+}
+
+/* --- New Full-Page Hero Styles --- */
+.hero-container {
+    background-color: #0B1120; /* Fallback color */
+    width: 100vw;
+    overflow: hidden;
+}
+
+.hero-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(120px);
+    opacity: 0.25;
+    z-index: 0;
+}
+
+.hero-blob.one {
+    width: 500px;
+    height: 500px;
+    background: #7C3AED; /* violet-600 */
+    top: -20%;
+    left: -15%;
+    animation: blob-1-animation 19s infinite alternate;
+}
+
+.hero-blob.two {
+    width: 400px;
+    height: 400px;
+    background: #A78BFA; /* violet-400 */
+    bottom: -10%;
+    right: -10%;
+    animation: blob-2-animation 10s infinite alternate;
+}
+
+.hero-blob.three {
+    width: 300px;
+    height: 300px;
+    background: #D8B4FE; /* fuchsia-300 */
+    top: 20%;
+    right: 25%;
+    animation: blob-3-animation 10s infinite alternate;
+}
+
+/* Hero content animation */
+.animate-fade-in-up {
+    animation: fade-in-up 1s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@keyframes fade-in-up {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Blob animations */
+@keyframes blob-1-animation {
+    from { transform: translate(-10%, -10%) scale(1); }
+    to { transform: translate(10%, 10%) scale(1.5); }
+}
+
+@keyframes blob-2-animation {
+    from { transform: translate(10%, 10%) scale(1); }
+    to { transform: translate(-10%, -10%) scale(0.5); }
+}
+
+@keyframes blob-3-animation {
+    from { transform: translate(-5%, 5%) scale(0.8); }
+    to { transform: translate(5%, -5%) scale(1.3); }
+}
+
+/* Ensure main content area is separated from the full-screen hero */
+main {
+    position: relative;
+    z-index: 10;
+}
+
+a:hover {
+    text-decoration: none;
 }

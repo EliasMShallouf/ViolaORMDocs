@@ -14,7 +14,7 @@ const TableOfContents = ({ onNavLinkClick, activeSection }) => {
     ];
 
     return (
-        <aside className="hidden lg:block lg:w-1/4 lg:pl-8">
+        <aside className="hidden lg:block">
             <nav id="toc" className="sticky top-20 pt-16 h-screen overflow-y-auto">
                 <h4 className="text-slate-100 font-semibold mb-4 text-sm">On this page</h4>
                 <ul className="space-y-2 border-l border-slate-700">

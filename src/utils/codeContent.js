@@ -46,8 +46,8 @@ dependencies {
     annotationProcessor 'com.eliasmshallouf:annotation-processor:1.0.0'
 
     // or for local jars
-    implementation files("lib/orm-core.jar")
-    annotationProcessor files("lib/annotation-processor.jar")
+    implementation files('lib/orm-core.jar')
+    annotationProcessor files('lib/annotation-processor.jar')
 }`,
     config: `// In your Spring @Configuration or @SpringBootApplication class
 import com.eliasmshallouf.orm.ConnectionManager;
@@ -148,7 +148,8 @@ public class EmployeeTable extends EntityModel<Employee, Long> {
 	public BlobColumn photo() { return columns.photo; }
 	// ...
 }`,
-    helloEntity: `// Hello.java
+    helloEntity: `// Hello.java - entity class
+
 @Entity
 public class Hello {
     @Id private String a;

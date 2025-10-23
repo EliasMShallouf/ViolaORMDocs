@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Header = ({ onNavLinkClick, activeSection }) => {
+const Header = ({ onNavLinkClick, activeSection, isHeroVisible }) => {
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const navLinks = [
@@ -17,9 +17,14 @@ const Header = ({ onNavLinkClick, activeSection }) => {
     };
 
     return (
-        <header className="bg-0B1120/80 backdrop-blur-md sticky top-0 z-50 w-full border-b border-slate-800">
-            <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-between items-center h-16">
+        <header className={`
+            fixed top-4 z-50 w-fit justify-self-center
+            border ${isHeroVisible ? 'border-slate-800' : 'border-slate-700/80'} backdrop-blur-2xl ${isMobileMenuOpen ? 'rounded-2xl' : 'rounded-full'} 
+            transition-all duration-300
+            ${isHeroVisible ? 'bg-slate-900/20' : 'bg-slate-900/50'}
+        `}>
+            <nav className="px-6 sm:px-8">
+                <div className="flex justify-between items-center h-16 gap-40">
                     {/* Logo and Project Name */}
                     <div className="flex-shrink-0 flex items-center">
                         <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-2">
@@ -36,12 +41,16 @@ const Header = ({ onNavLinkClick, activeSection }) => {
                                 </linearGradient>
                             </defs>
                         </svg>
-                        <span className="text-white text-2xl font-bold">Viola ORM</span>
+                        <div className={`transition-all duration-300 ease-in-out overflow-hidden ${isHeroVisible ? 'w-0 opacity-0' : 'w-auto opacity-100 ml-3'}`}>
+                            <a href="#" onClick={(e) => handleLinkClick(e, '#')} className="text-white text-2xl font-bold whitespace-nowrap">
+                                Viola ORM
+                            </a>
+                        </div>
                     </div>
                     
                     {/* Mobile Menu Button */}
                     <div className="md:hidden">
-                        <button id="mobile-menu-button" className="text-slate-300 hover:text-white focus:outline-none" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+                        <button id="mobile-menu-button" className="text-slate-300 hover:text-white focus:outline-none bg-transparent" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
                             </svg>
@@ -60,7 +69,7 @@ const Header = ({ onNavLinkClick, activeSection }) => {
             </nav>
  
             {/* Mobile Menu (Hidden by default) */}
-            <div id="mobile-menu" className={`md:hidden ${isMobileMenuOpen ? '' : 'hidden'} bg-slate-900`}>
+            <div id="mobile-menu" className={`md:hidden ${isMobileMenuOpen ? '' : 'hidden'} bg-transparent`}>
                 <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                     {navLinks.map(link => (
                         <a key={link.href} href={link.href} onClick={(e) => handleLinkClick(e, link.href)} className={`nav-link text-slate-300 hover:text-white block px-3 py-2 rounded-md text-base font-medium ${activeSection.startsWith(link.href) ? 'active' : ''}`}>
