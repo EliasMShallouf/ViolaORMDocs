@@ -255,8 +255,9 @@ pre:hover .copy-btn {
 /* --- New Full-Page Hero Styles --- */
 .hero-container {
     background-color: #0B1120; /* Fallback color */
-    width: 100vw;
+    width: 100%;
     overflow: hidden;
+    position: relative;
 }
 
 .hero-blob {
