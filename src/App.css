@@ -107,9 +107,12 @@ code[class*="language-"] {
 
 /* Gradient hero text */
 .hero-text {
-    background: linear-gradient(to right, #EDE9FE, #A78BFA, #D8B4FE);
+    /* Animated Gradient */
+    background: linear-gradient(90deg, #d5aeff, #8a63ff, #aa96fd, #9532ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+    background-size: 200% auto;
+    animation: gradient-animation 5s ease-in-out infinite;
 }
 
 /* Section heading styles */
@@ -185,11 +188,6 @@ pre:hover .copy-btn {
 
 /* --- New Gemini AI Assistant Styles --- */
 .tab-btn {
-    background-color: #1E293B; /* slate-800 */
-    color: #94A3B8; /* slate-400 */
-    border: 1px solid #334155; /* slate-700 */
-    padding: 0.5rem 1rem;
-    border-radius: 0.375rem; /* rounded-md */
     font-weight: 600;
     transition: all 0.2s ease;
 }
@@ -205,7 +203,7 @@ pre:hover .copy-btn {
     color: #CBD5E1;
     padding: 0.75rem 1rem;
     width: 100%;
-    min-height: 80px;
+    min-height: 120px;
     font-family: 'Fira Code', monospace;
     font-size: 0.875rem;
 }
@@ -330,6 +328,13 @@ pre:hover .copy-btn {
     to { transform: translate(5%, -5%) scale(1.3); }
 }
 
+/* Animated gradient keyframes */
+@keyframes gradient-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 /* Ensure main content area is separated from the full-screen hero */
 main {
     position: relative;
@@ -338,4 +343,46 @@ main {
 
 a:hover {
     text-decoration: none;
+}
+
+/* --- Scroll Down Mouse Indicator --- */
+.mouse-scroll {
+    width: 28px;
+    height: 48px;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+    border-radius: 14px;
+    position: relative;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+}
+
+.mouse-scroll:hover {
+    opacity: 1;
+}
+
+.mouse-scroll-wheel {
+    width: 4px;
+    height: 8px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 2px;
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: scroll-wheel-animation 2s infinite;
+}
+
+@keyframes scroll-wheel-animation {
+    0% { top: 8px; opacity: 1; }
+    50% { top: 20px; opacity: 1; }
+    100% { top: 30px; opacity: 0; }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.gemini-result-tab.active {
+    color: #A78BFA;
 }

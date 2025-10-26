@@ -7,6 +7,8 @@ import CodeBlock from './components/CodeBlock';
 import ScrollToTopButton from './components/ScrollToTopButton';
 import { useInView } from 'react-intersection-observer';
 import GeminiAssistant from './components/GeminiAssistant';
+import ScrollIndicator from './components/ScrollIndicator';
+import CommunitySection from './components/CommunitySection';
 import { codeContent } from './utils/codeContent';
 
 // --- Main App Component ---
@@ -25,7 +27,7 @@ export default function App() {
             const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
     
             window.scrollTo({
-                top: offsetPosition,
+                top: href === '#' ? 0 : offsetPosition,
                 behavior: "smooth"
             });
             
@@ -122,22 +124,26 @@ export default function App() {
                         <a href="#getting-started" onClick={(e) => handleSmoothScroll(e, '#getting-started')} className="inline-block bg-violet-600 hover:bg-violet-700 text-white font-semibold text-base px-6 py-2.5 rounded-lg shadow-lg transition-all duration-200">
                             Get Started
                         </a>
-                        <a href="https://github.com/Elias-Shallouf/viola/releases" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 border border-slate-600 hover:bg-slate-800 text-slate-300 font-medium text-base px-6 py-2.5 rounded-lg shadow-lg transition-all duration-200">
+                        <a href="https://github.com/EliasMShallouf/ViolaORM/releases" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 border border-slate-600 hover:bg-slate-800 text-slate-300 font-medium text-base px-6 py-2.5 rounded-lg shadow-lg transition-all duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                             Download
                         </a>
-                        <a href="https://github.com/Elias-Shallouf/viola" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-slate-400 hover:text-violet-400 font-medium text-base px-6 py-2.5 rounded-lg transition-all duration-200">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-                            GitHub
-                        </a>
                     </div>
+                    <br/>
+                    <a href="https://github.com/EliasMShallouf/ViolaORM" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-slate-400 hover:text-violet-400 font-medium text-base px-6 py-2.5 rounded-lg transition-all duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                        GitHub
+                    </a>
                 </div>
+
+                {/* Scroll Down Indicator */}
+                <ScrollIndicator onClick={(e) => handleSmoothScroll(e, '#introduction')} href="#introduction" />
             </section>
 
             <div className="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex flex-col-reverse lg:flex-row">
                     {/* Main documentation content */}
-                    <main className="lg:w-3/4 lg:pr-12 xl:pr-24 py-12 lg:py-16">
+                    <main className="lg:w-3/4 lg:pr-12 xl:pr-24 pt-12 lg:pt-16">
                         <section id="introduction" className="mb-16 scroll-mt-20">
                             <h2>What is Viola ORM?</h2>
                             <p className="mb-4">
@@ -182,7 +188,7 @@ export default function App() {
 
                             <h3>2. Configuration (Spring Boot Example)</h3>
                             <p className="mb-4">Viola is configured by instantiating a <code>ConnectionManager</code>. It's designed to be used
-                               as a singleton bean in a Spring application, as seen in your <code>App.java</code> file.</p>
+                               as a singleton bean in a Spring application, as seen in the <code>App.java</code> file.</p>
                             <CodeBlock code={codeContent.config} language="java" />
 
                             <h3>3. Your First Entity</h3>
@@ -223,7 +229,7 @@ export default function App() {
                                 </li>
                             </ul>
                             <h3>Generated Code Explained</h3>
-                            <p className="mb-4">Let's look at a "before and after" based on your <code>Employee</code> entity.</p>
+                            <p className="mb-4">Let's look at a "before and after" based on the <code>Employee</code> entity.</p>
                             
                             <div className="grid md:grid-cols-2 gap-6">
                                 <div className="min-w-0">
@@ -263,17 +269,17 @@ export default function App() {
                                a fluent Java API. You access this by calling <code>manager.query()</code>. The main class that enables this magic to happens is (<code>SelectQuery</code>).</p>
 
                             <h4 className="text-lg font-semibold text-slate-300 mt-6 mb-2">Example 1: Simple <code>WHERE</code> Clause</h4>
-                            <p className="mb-4">From your <code>EmployeeService</code>, finding an employee by full name. Notice the use
+                            <p className="mb-4">From the <code>EmployeeService</code>, finding an employee by full name. Notice the use
                                of <code>Concat</code> and <code>valueOf</code>.</p>
                             <CodeBlock code={codeContent.whereClause} language="java" />
 
                             <h4 className="text-lg font-semibold text-slate-300 mt-6 mb-2">Example 2: Joins, Aggregates & Group By</h4>
-                            <p className="mb-4">From your <code>CustomerService.getCustomersWithTotals()</code>. This query joins three tables,
+                            <p className="mb-4">From the <code>CustomerService.getCustomersWithTotals()</code>. This query joins three tables,
                                calculates a sum with arithmetic, groups the results, and orders them.</p>
                             <CodeBlock code={codeContent.joins} language="java" />
 
                             <h4 className="text-lg font-semibold text-slate-300 mt-6 mb-2">Example 3: Subqueries</h4>
-                            <p className="mb-4">From your <code>SalesOrderService</code>. This query builds a complete <code>SubQuery</code> object
+                            <p className="mb-4">From the <code>SalesOrderService</code>. This query builds a complete <code>SubQuery</code> object
                                (which is also an <code>EntityModel</code>) and then selects from it in the outer query.</p>
                             <CodeBlock code={codeContent.subqueries} language="java" />
 
@@ -349,13 +355,32 @@ export default function App() {
                                        into a <code>ColumnInfo</code> so it can be used in queries.</p>
                                 </li>
                             </ul>
-                        </section>
 
+                            <h3 className="!mt-8">Download Full Java Example</h3>
+                            <p className="mb-4">
+                                To see all these concepts in action, you can download a complete Java project. This example application demonstrates advanced use-cases and best practices for Viola ORM, including:
+                            </p>
+                            <ul className="list-disc list-inside space-y-2 mt-4 pl-2 mb-6">
+                                <li>A suite of 11 complex queries from an MSc thesis, showcasing joins, subqueries, and aggregations.</li>
+                                <li>Handling entities with composite primary keys.</li>
+                                <li>Defining entities programmatically without using the annotation processor.</li>
+                                <li>Implementing pagination for large result sets.</li>
+                                <li>Constructing fluent <code>UPDATE</code> queries with custom logic using <code>CASE...WHEN</code> statements.</li>
+                                <li>Managing database transactions for data integrity.</li>
+                                <li>Fetching query results into flexible formats like <code>Map&lt;String, Object&gt;</code> and <code>Object[]</code>.</li>
+                            </ul>
+                            <a href="https://github.com/EliasMShallouf/ViolaORMJavaExample" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold text-base px-6 py-2.5 rounded-lg shadow-lg transition-all duration-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                Download Example Project
+                            </a>
+                        </section>
                     </main>
 
                     {/* Right-side Table of Contents */}
                     <TableOfContents onNavLinkClick={handleSmoothScroll} activeSection={activeSection} />
                 </div>
+
+                <CommunitySection />
             </div>
 
             <Footer ref={footerRef}/>
