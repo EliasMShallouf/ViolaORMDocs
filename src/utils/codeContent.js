@@ -3,7 +3,7 @@ export const codeContent = {
 <dependencies>
     <!-- The core runtime library -->
     <dependency>
-        <groupId>com.eliasmshallouf</groupId>
+        <groupId>io.viola</groupId>
         <artifactId>orm-core</artifactId>
         <version>1.0.0</version>
     </dependency>
@@ -20,7 +20,7 @@ export const codeContent = {
                 <target>1.8</target>
                 <annotationProcessorPaths>
                     <path>
-                        <groupId>com.eliasmshallouf</groupId>
+                        <groupId>io.viola</groupId>
                         <artifactId>annotation-processor</artifactId>
                         <version>1.0.0</version>
                     </path>
@@ -40,17 +40,17 @@ repositories {
 
 dependencies {
     // The core runtime library
-    implementation 'com.eliasmshallouf:orm-core:1.0.0'
+    implementation 'io.viola:orm-core:1.0.0'
     
     // The compile-time annotation processor
-    annotationProcessor 'com.eliasmshallouf:annotation-processor:1.0.0'
+    annotationProcessor 'io.viola:annotation-processor:1.0.0'
 
     // or for local jars
     implementation files('lib/orm-core.jar')
     annotationProcessor files('lib/annotation-processor.jar')
 }`,
     config: `// In your Spring @Configuration or @SpringBootApplication class
-import com.eliasmshallouf.orm.ConnectionManager;
+import io.viola.orm.ConnectionManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
@@ -67,9 +67,9 @@ public ConnectionManager createConnectionManager(
     entity: `// User.java
 package com.example.model;
 
-import com.eliasmshallouf.orm.annotations.Column;
-import com.eliasmshallouf.orm.annotations.Entity;
-import com.eliasmshallouf.orm.annotations.Id;
+import io.viola.orm.annotations.Column;
+import io.viola.orm.annotations.Entity;
+import io.viola.orm.annotations.Id;
 
 @Entity
 public class User {
@@ -85,7 +85,7 @@ public class User {
     // Getters and setters...
 }`,
     employeeEntity: `package com.example.model;
-import com.eliasmshallouf.orm.annotations.*;
+import io.viola.orm.annotations.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -114,13 +114,14 @@ public class Employee implements Serializable {
     employeeTable: `package com.example.model.orm;
 
 import com.example.model.Employee;
-import com.eliasmshallouf.orm.table.EntityModel;
-import com.eliasmshallouf.orm.table.TableColumns;
-import com.eliasmshallouf.orm.columns.*;
+import io.viola.orm.table.EntityModel;
+import io.viola.orm.table.TableColumns;
+import io.viola.orm.columns.*;
 import java.time.LocalDateTime;
 
 public class EmployeeTable extends EntityModel<Employee, Long> {
-	
+	// reflection caching ...
+
     public static class Columns extends TableColumns<Employee> {
 		public final NumericColumn<Long> employeeId = new NumericColumn<>(this, "employeeId");
 		public final TextColumn lastName = new TextColumn(this, "lastname");
